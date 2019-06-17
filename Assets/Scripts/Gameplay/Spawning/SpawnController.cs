@@ -10,7 +10,7 @@ namespace Gameplay.Spawning
     {
         [SerializeField] private Vector3 maxSpawnVector;
 
-        [GenericInjected] private FactoryMap factoryMap;
+        [GenericInjected(Singleton = true)] private FactoryMap factoryMap;
 
         private CubeFactory cubeFactory;
         private SphereFactory sphereFactory;

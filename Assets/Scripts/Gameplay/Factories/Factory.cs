@@ -16,7 +16,7 @@ namespace Gameplay.Factories
     {
         [SerializeField] private T prefab;
 
-        [GenericInjected] private FactoryMap factoryMap;
+        [GenericInjected(Singleton = true)] private FactoryMap factoryMap;
 
         protected virtual void Awake()
         {

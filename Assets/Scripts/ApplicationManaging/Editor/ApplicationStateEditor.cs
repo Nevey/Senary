@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ApplicationManaging;
 using DependencyInjection.Layers;
 using UnityEditor;
 using UnityEngine;
 using Utilities;
 
-namespace ApplicationStates.Editor
+namespace ApplicationManaging.Editor
 {
     [CustomEditor(typeof(ApplicationState))]
     public class ApplicationStateEditor : UnityEditor.Editor

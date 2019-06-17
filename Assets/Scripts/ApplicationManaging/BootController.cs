@@ -10,6 +10,7 @@ namespace ApplicationManaging
         {
             ApplicationManager.SetState(applicationMode.InitialState);
             
+            // This delay is just to test 
             Invoke(nameof(ToGameState), 2f);
         }
 

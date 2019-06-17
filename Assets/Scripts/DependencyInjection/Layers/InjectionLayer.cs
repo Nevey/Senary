@@ -31,41 +31,51 @@ namespace DependencyInjection.Layers
             
             for (int i = 0; i < fieldInfos.Length; i++)
             {
-                FieldInfo fieldInfo = fieldInfos[i];
-
                 object dependency;
-
-                // Get or Create a Dependency, right now we approach them as if they are singletons
-                if (dependencies.ContainsKey(fieldInfo.FieldType))
+                
+                FieldInfo fieldInfo = fieldInfos[i];
+                
+                T attribute = fieldInfo.GetCustomAttribute<T>();
+                
+                if (attribute.Singleton)
                 {
-                    dependency = dependencies[fieldInfo.FieldType];
+                    // Get or Create a Dependency, right now we approach them as if they are singletons
+                    if (dependencies.ContainsKey(fieldInfo.FieldType))
+                    {
+                        dependency = dependencies[fieldInfo.FieldType];
+                    }
+                    else
+                    {
+                        // TODO: Add Monobehaviour support
+                        dependencies[fieldInfo.FieldType] = dependency = Activator.CreateInstance(fieldInfo.FieldType);
+                    }
+
+                    if (dependency == null)
+                    {
+                        throw Log.Exception(
+                            $"Something went wrong while trying to assign Service of type {fieldInfo.FieldType}");
+                    }
+
+                    // Track references to this Dependency
+                    if (references.ContainsKey(dependency))
+                    {
+                        if (references[dependency].Contains(@object))
+                        {
+                            throw Log.Exception(
+                                $"Trying to use the same Service of type {fieldInfo.FieldType} twice in {@object}");
+                        }
+                        
+                        references[dependency].Add(@object);
+                    }
+                    else
+                    {
+                        references[dependency] = new List<object> {@object};
+                    }
                 }
                 else
                 {
                     // TODO: Add Monobehaviour support
-                    dependencies[fieldInfo.FieldType] = dependency = Activator.CreateInstance(fieldInfo.FieldType);
-                }
-
-                if (dependency == null)
-                {
-                    throw Log.Exception(
-                        $"Something went wrong while trying to assign Service of type {fieldInfo.FieldType}");
-                }
-
-                // Track references to this Dependency
-                if (references.ContainsKey(dependency))
-                {
-                    if (references[dependency].Contains(@object))
-                    {
-                        throw Log.Exception(
-                            $"Trying to use the same Service of type {fieldInfo.FieldType} twice in {@object}");
-                    }
-                    
-                    references[dependency].Add(@object);
-                }
-                else
-                {
-                    references[dependency] = new List<object> {@object};
+                    dependency = Activator.CreateInstance(fieldInfo.FieldType);
                 }
                 
                 fieldInfo.SetValue(@object, dependency);
