@@ -6,7 +6,7 @@ namespace ApplicationManaging
     {
         private static ApplicationManaging.ApplicationStates values;
         private static ApplicationManaging.ApplicationState mainState;
-        private static ApplicationManaging.ApplicationState gameState;
+        private static ApplicationManaging.ApplicationState gamePlayState;
 
         public static ApplicationManaging.ApplicationStates Values
         {
@@ -28,13 +28,13 @@ namespace ApplicationManaging
             }
         }
 
-        public static ApplicationManaging.ApplicationState GameState
+        public static ApplicationManaging.ApplicationState GamePlayState
         {
             get
             {
-                if (gameState == null && Values != null)
-                    gameState = (ApplicationManaging.ApplicationState)Values.GetEnumItem("75d0b78d4266346498d7a1d63b4a30bf");
-                return gameState;
+                if (gamePlayState == null && Values != null)
+                    gamePlayState = (ApplicationManaging.ApplicationState)Values.GetEnumItem("75d0b78d4266346498d7a1d63b4a30bf");
+                return gamePlayState;
             }
         }
 

@@ -1,6 +1,5 @@
-using DependencyInjection.Attributes;
-using DependencyInjection.Layers;
 using Gameplay.Factories;
+using Gameplay.InjectionLayers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,25 +9,25 @@ namespace Gameplay.Spawning
     {
         [SerializeField] private Vector3 maxSpawnVector;
 
-        [GenericInjected(Singleton = true)] private FactoryMap factoryMap;
+        [GameplayInjected] private FactoryMap factoryMap;
 
         private CubeFactory cubeFactory;
         private SphereFactory sphereFactory;
         
         private void Start()
         {
-            GenericInjectionLayer.Instance.InjectDependencies(this);
+            GameplayInjectionLayer.Instance.InjectDependencies(this);
 
             cubeFactory = factoryMap.GetFactory<CubeFactory>();
             sphereFactory = factoryMap.GetFactory<SphereFactory>();
             
-            InvokeRepeating("SpawnCube", 0.5f, 1f);
-            InvokeRepeating("SpawnSphere", 1f, 1f);
+            InvokeRepeating(nameof(SpawnCube), 0.5f, 1f);
+            InvokeRepeating(nameof(SpawnSphere), 1f, 1f);
         }
 
         private void OnDestroy()
         {
-            GenericInjectionLayer.Instance.DumpDependencies(this);
+            GameplayInjectionLayer.Instance.DumpDependencies(this);
         }
 
         private void SpawnCube()

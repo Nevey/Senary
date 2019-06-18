@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94a3103d4ea84e2b825092e7e5fb4611, type: 3}
-  m_Name: GameState
+  m_Name: GamePlayState
   m_EditorClassIdentifier: 
   parentEnum: {fileID: 11400000, guid: 81d6ba6b0b2c3ee488eb1596c3ffa676, type: 2}
   guid: 75d0b78d4266346498d7a1d63b4a30bf
-  name: GameState
+  name: GamePlayState
   scene:
     sceneAsset: {fileID: 102900000, guid: 86b8e1d913eddf94f9d4896179b09dbe, type: 3}
     scenePath: Assets/Scenes/Game.unity
   selectedIndex: 1
-  selectedInjectionLayer: DependencyInjection.Layers.GenericInjectionLayer, Assembly-CSharp,
+  selectedInjectionLayer: Gameplay.InjectionLayers.GameplayInjectionLayer, Assembly-CSharp,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

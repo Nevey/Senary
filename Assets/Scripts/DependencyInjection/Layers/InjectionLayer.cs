@@ -13,7 +13,7 @@ namespace DependencyInjection.Layers
         public abstract void DumpDependencies(object @object);
     }
     
-    public abstract class InjectionLayer<T> : InjectionLayer where T : GenericInjectedAttribute
+    public abstract class InjectionLayer<T> : InjectionLayer where T : InjectedAttribute
     {
         private readonly Dictionary<Type, object> dependencies = new Dictionary<Type, object>();
         private readonly Dictionary<object, List<object>> references = new Dictionary<object, List<object>>();
@@ -31,54 +31,56 @@ namespace DependencyInjection.Layers
             
             for (int i = 0; i < fieldInfos.Length; i++)
             {
-                object dependency;
+                object injectedInstance;
                 
                 FieldInfo fieldInfo = fieldInfos[i];
+
+                SingletonInjectedAttribute singletonInjectedAttribute =
+                    fieldInfo.FieldType.GetCustomAttribute<SingletonInjectedAttribute>();
                 
-                T attribute = fieldInfo.GetCustomAttribute<T>();
-                
-                if (attribute.Singleton)
+                if (singletonInjectedAttribute != null)
                 {
-                    // Get or Create a Dependency, right now we approach them as if they are singletons
                     if (dependencies.ContainsKey(fieldInfo.FieldType))
                     {
-                        dependency = dependencies[fieldInfo.FieldType];
+                        injectedInstance = dependencies[fieldInfo.FieldType];
                     }
                     else
                     {
                         // TODO: Add Monobehaviour support
-                        dependencies[fieldInfo.FieldType] = dependency = Activator.CreateInstance(fieldInfo.FieldType);
+                        dependencies[fieldInfo.FieldType] = injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
                     }
 
-                    if (dependency == null)
+                    if (injectedInstance == null)
                     {
                         throw Log.Exception(
                             $"Something went wrong while trying to assign Service of type {fieldInfo.FieldType}");
                     }
 
-                    // Track references to this Dependency
-                    if (references.ContainsKey(dependency))
+                    // Track references to this singleton injected instance
+                    if (references.ContainsKey(injectedInstance))
                     {
-                        if (references[dependency].Contains(@object))
+                        if (references[injectedInstance].Contains(@object))
                         {
                             throw Log.Exception(
                                 $"Trying to use the same Service of type {fieldInfo.FieldType} twice in {@object}");
                         }
                         
-                        references[dependency].Add(@object);
+                        references[injectedInstance].Add(@object);
                     }
                     else
                     {
-                        references[dependency] = new List<object> {@object};
+                        references[injectedInstance] = new List<object> {@object};
                     }
+                    
+                    Log.Write($"Singleton {injectedInstance} has {references[injectedInstance].Count} references");
                 }
                 else
                 {
                     // TODO: Add Monobehaviour support
-                    dependency = Activator.CreateInstance(fieldInfo.FieldType);
+                    injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
                 }
                 
-                fieldInfo.SetValue(@object, dependency);
+                fieldInfo.SetValue(@object, injectedInstance);
             }
         }
 
@@ -88,7 +90,7 @@ namespace DependencyInjection.Layers
             
             foreach (KeyValuePair<object, List<object>> keyValuePair in references)
             {
-                object dependency = keyValuePair.Key;
+                object injectedInstance = keyValuePair.Key;
                 
                 List<object> objects = keyValuePair.Value;
                 
@@ -103,10 +105,10 @@ namespace DependencyInjection.Layers
                     break;
                 }
 
-                // Service has no more references, time to clean it up
+                // Injected instance has no more references, time to clean it up
                 if (objects.Count == 0)
                 {
-                    Type type = dependency.GetType();
+                    Type type = injectedInstance.GetType();
                     
                     if (!dependencies.ContainsKey(type))
                     {
@@ -114,7 +116,7 @@ namespace DependencyInjection.Layers
                     }
 
                     dependencies.Remove(type);
-                    dependenciesToRemove.Add(dependency);
+                    dependenciesToRemove.Add(injectedInstance);
                 }
             }
 
@@ -127,5 +129,10 @@ namespace DependencyInjection.Layers
                 dependenciesToRemove[i] = null;
             }
         }
+    }
+    
+    public class GenericInjectionLayer : InjectionLayer<InjectedAttribute>
+    {
+        
     }
 }

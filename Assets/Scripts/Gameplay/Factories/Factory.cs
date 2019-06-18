@@ -1,5 +1,6 @@
 using DependencyInjection.Attributes;
 using DependencyInjection.Layers;
+using Gameplay.InjectionLayers;
 using UnityEngine;
 
 namespace Gameplay.Factories
@@ -16,18 +17,18 @@ namespace Gameplay.Factories
     {
         [SerializeField] private T prefab;
 
-        [GenericInjected(Singleton = true)] private FactoryMap factoryMap;
+        [GameplayInjected] private FactoryMap factoryMap;
 
         protected virtual void Awake()
         {
-            GenericInjectionLayer.Instance.InjectDependencies(this);
+            GameplayInjectionLayer.Instance.InjectDependencies(this);
             factoryMap.MapFactory(this);
         }
 
         protected virtual void OnDestroy()
         {
             factoryMap.UnMapFactory(this);
-            GenericInjectionLayer.Instance.DumpDependencies(this);
+            GameplayInjectionLayer.Instance.DumpDependencies(this);
         }
 
         public override MonoBehaviour Instantiate()

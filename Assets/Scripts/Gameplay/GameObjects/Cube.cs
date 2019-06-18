@@ -1,24 +1,22 @@
-using DependencyInjection.Attributes;
-using DependencyInjection.Layers;
+using Gameplay.InjectionLayers;
 using UnityEngine;
-using Utilities;
 
 namespace Gameplay
 {
     public class Cube : MonoBehaviour
     {
-        [GenericInjected] private Test test;
+        [GameplayInjected] private Test test;
         
         private void Awake()
         {
-            GenericInjectionLayer.Instance.InjectDependencies(this);
+            GameplayInjectionLayer.Instance.InjectDependencies(this);
 
             test.testString = "Cube";
         }
 
         private void Update()
         {
-            Log.Write("dsa");
+//            Log.Write("dsa");
         }
     }
 }

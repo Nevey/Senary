@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using DependencyInjection.Attributes;
 using Utilities;
 
 namespace Gameplay.Factories
 {
+    [SingletonInjected]
     public class FactoryMap
     {
         private readonly List<Factory> factoryMap = new List<Factory>();
