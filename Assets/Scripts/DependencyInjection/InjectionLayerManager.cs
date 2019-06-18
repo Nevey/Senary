@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using DependencyInjection.Attributes;
 using DependencyInjection.Layers;
 using Utilities;
 
@@ -31,7 +32,7 @@ namespace DependencyInjection
             if (!injectionLayers.ContainsKey(type))
             {
                 InjectionLayer injectionLayer = (InjectionLayer) Activator.CreateInstance(type);
-                injectionLayers[injectionLayer.AttributeType] = injectionLayer;
+                injectionLayers[type] = injectionLayer;
                 
                 Log.Write($"Instantiated new <b>{type.Name}</b>");
             }
@@ -43,18 +44,19 @@ namespace DependencyInjection
         
         public static InjectionLayer GetInjectionLayer(FieldInfo fieldInfo)
         {
-            object[] customAttributes = fieldInfo.GetCustomAttributes(true);
-
-            for (int j = 0; j < customAttributes.Length; j++)
+            InjectedAttribute injectedAttribute = fieldInfo.FieldType.GetCustomAttribute<InjectedAttribute>();
+            if (injectedAttribute == null)
             {
-                Type attributeType = customAttributes[j].GetType();
-                if (injectionLayers.ContainsKey(attributeType))
-                {
-                    return injectionLayers[attributeType];
-                }
+                return null;
+            }
+            
+            Type type = injectedAttribute.Layer;
+            if (injectionLayers.ContainsKey(type))
+            {
+                return injectionLayers[type];
             }
 
-            throw Log.Exception("");
+            return null;
         }
     }
 }

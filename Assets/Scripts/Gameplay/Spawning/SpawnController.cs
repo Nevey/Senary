@@ -1,6 +1,6 @@
 using DependencyInjection;
+using DependencyInjection.Attributes;
 using Gameplay.Factories;
-using Gameplay.InjectionLayers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,7 +10,7 @@ namespace Gameplay.Spawning
     {
         [SerializeField] private Vector3 maxSpawnVector;
 
-        [GameplayInjected] private FactoryMap factoryMap;
+        [Inject] private FactoryMap factoryMap;
 
         private CubeFactory cubeFactory;
         private SphereFactory sphereFactory;

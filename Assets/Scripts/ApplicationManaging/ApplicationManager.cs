@@ -103,7 +103,7 @@ namespace ApplicationManaging
             isStarted = true;
             
             // Create the default injection layer, in case you don't care about DI layering
-            InjectionLayerManager.CreateLayer(typeof(GenericInjectionLayer));
+            InjectionLayerManager.CreateLayer(typeof(InjectionLayer));
             SetState(initialState);
         }
     }

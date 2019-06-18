@@ -1,10 +1,12 @@
 using System;
+using DependencyInjection.Layers;
 
 namespace DependencyInjection.Attributes
 {
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class InjectedAttribute : Attribute
     {
-        
+        public Type Layer { get; set; } = typeof(InjectionLayer);
+        public bool Singleton { get; set; }
     }
 }

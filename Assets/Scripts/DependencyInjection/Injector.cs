@@ -9,18 +9,18 @@ namespace DependencyInjection
     {
         public static void Inject(object @object)
         {
-            FieldInfo[] fieldInfos = Reflection.GetFieldsWithAttribute<InjectedAttribute>(@object.GetType());
+            FieldInfo[] fieldInfos = Reflection.GetFieldsWithAttribute<InjectAttribute>(@object.GetType());
 
             for (int i = 0; i < fieldInfos.Length; i++)
             {
                 InjectionLayer injectionLayer = InjectionLayerManager.GetInjectionLayer(fieldInfos[i]);
-                injectionLayer.InjectDependencies(@object);
+                injectionLayer.InjectIntoField(fieldInfos[i], @object);
             }
         }
 
         public static void Dump(object @object)
         {
-            FieldInfo[] fieldInfos = Reflection.GetFieldsWithAttribute<InjectedAttribute>(@object.GetType());
+            FieldInfo[] fieldInfos = Reflection.GetFieldsWithAttribute<InjectAttribute>(@object.GetType());
             
             for (int i = 0; i < fieldInfos.Length; i++)
             {

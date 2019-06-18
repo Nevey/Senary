@@ -1,15 +1,22 @@
 using System.Collections.Generic;
 using DependencyInjection.Attributes;
+using Gameplay.InjectionLayers;
 using Utilities;
 
 namespace Gameplay.Factories
 {
-    [SingletonInjected]
+    [Injected(Layer = typeof(GameplayInjectionLayer), Singleton = true)]
     public class FactoryMap
     {
+        // TODO: Vamp into dict
         private readonly List<Factory> factoryMap = new List<Factory>();
 
-        public void MapFactory(Factory factory)
+        /// <summary>
+        /// Add a factory to the factory map
+        /// </summary>
+        /// <param name="factory"></param>
+        /// <exception cref="Exception"></exception>
+        public void AddFactory(Factory factory)
         {
             if (factoryMap.Contains(factory))
             {
@@ -20,7 +27,12 @@ namespace Gameplay.Factories
             factoryMap.Add(factory);
         }
 
-        public void UnMapFactory(Factory factory)
+        /// <summary>
+        /// Remove a factory from the factory map
+        /// </summary>
+        /// <param name="factory"></param>
+        /// <exception cref="Exception"></exception>
+        public void RemoveFactory(Factory factory)
         {
             if (!factoryMap.Contains(factory))
             {
@@ -29,6 +41,12 @@ namespace Gameplay.Factories
             }
         }
 
+        /// <summary>
+        /// Get a factory based on Factory type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public T GetFactory<T>() where T : Factory
         {
             for (int i = 0; i < factoryMap.Count; i++)

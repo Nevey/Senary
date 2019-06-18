@@ -6,85 +6,73 @@ using Utilities;
 
 namespace DependencyInjection.Layers
 {
-    [Serializable]
-    public abstract class InjectionLayer
-    {
-        public abstract Type AttributeType { get; }
-        public abstract void InjectDependencies(object @object);
-        public abstract void DumpDependencies(object @object);
-    }
-    
-    public abstract class InjectionLayer<T> : InjectionLayer where T : InjectedAttribute
+    public class InjectionLayer
     {
         private readonly Dictionary<Type, object> dependencies = new Dictionary<Type, object>();
         private readonly Dictionary<object, List<object>> references = new Dictionary<object, List<object>>();
 
-        public override Type AttributeType => typeof(T);
-
-        public override void InjectDependencies(object @object)
+        public void InjectIntoField(FieldInfo fieldInfo, object @object)
         {
-            FieldInfo[] fieldInfos = Reflection.GetFieldsWithAttribute<T>(@object.GetType());
-            
-            for (int i = 0; i < fieldInfos.Length; i++)
+            object injectedInstance;
+
+            InjectedAttribute injectedAttribute = fieldInfo.FieldType.GetCustomAttribute<InjectedAttribute>();
+
+            if (injectedAttribute == null)
             {
-                object injectedInstance;
-                
-                FieldInfo fieldInfo = fieldInfos[i];
-
-                SingletonInjectedAttribute singletonInjectedAttribute =
-                    fieldInfo.FieldType.GetCustomAttribute<SingletonInjectedAttribute>();
-                
-                if (singletonInjectedAttribute != null)
+                // TODO: Just do stuff or throw exception?
+                return;
+            }
+            
+            if (injectedAttribute.Singleton)
+            {
+                if (dependencies.ContainsKey(fieldInfo.FieldType))
                 {
-                    if (dependencies.ContainsKey(fieldInfo.FieldType))
-                    {
-                        injectedInstance = dependencies[fieldInfo.FieldType];
-                    }
-                    else
-                    {
-                        // TODO: Add Monobehaviour support
-                        dependencies[fieldInfo.FieldType] = injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
-                    }
-
-                    if (injectedInstance == null)
-                    {
-                        throw Log.Exception(
-                            $"Something went wrong while trying to assign Service of type <b>{fieldInfo.FieldType}</b>");
-                    }
-
-                    // Track references to this singleton injected instance
-                    if (references.ContainsKey(injectedInstance))
-                    {
-                        if (references[injectedInstance].Contains(@object))
-                        {
-                            throw Log.Exception(
-                                $"Trying to use the same Service of type <b>{fieldInfo.FieldType}</b> twice in <b>{@object}</b>");
-                        }
-                        
-                        references[injectedInstance].Add(@object);
-                    }
-                    else
-                    {
-                        references[injectedInstance] = new List<object> {@object};
-                    }
-                    
-                    Log.Write($"Singleton <b>{injectedInstance.GetType().Name}</b> has <b>{references[injectedInstance].Count}</b> reference(s)");
+                    injectedInstance = dependencies[fieldInfo.FieldType];
                 }
                 else
                 {
                     // TODO: Add Monobehaviour support
-                    injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
+                    dependencies[fieldInfo.FieldType] = injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
+                }
+
+                if (injectedInstance == null)
+                {
+                    throw Log.Exception(
+                        $"Something went wrong while trying to assign Service of type <b>{fieldInfo.FieldType}</b>");
+                }
+
+                // Track references to this singleton injected instance
+                if (references.ContainsKey(injectedInstance))
+                {
+                    if (references[injectedInstance].Contains(@object))
+                    {
+                        throw Log.Exception(
+                            $"Trying to use the same Service of type <b>{fieldInfo.FieldType}</b> twice in <b>{@object}</b>");
+                    }
                     
-                    Log.Write($"Non-Singleton <b>{injectedInstance.GetType().Name}</b> was created");
+                    references[injectedInstance].Add(@object);
+                }
+                else
+                {
+                    references[injectedInstance] = new List<object> {@object};
                 }
                 
-                fieldInfo.SetValue(@object, injectedInstance);
-                
-                Log.Write($"<b>{injectedInstance.GetType().Name}</b> was injected into <b>{@object.GetType().Name}</b>");
+                Log.Write($"Singleton <b>{injectedInstance.GetType().Name}</b> has <b>{references[injectedInstance].Count}</b> reference(s)");
             }
+            else
+            {
+                // TODO: Add Monobehaviour support
+                injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
+                
+                Log.Write($"Non-Singleton <b>{injectedInstance.GetType().Name}</b> was created");
+            }
+            
+            fieldInfo.SetValue(@object, injectedInstance);
+            
+            Log.Write($"<b>{injectedInstance.GetType().Name}</b> was injected into <b>{@object.GetType().Name}</b>");
         }
 
-        public override void DumpDependencies(object @object)
+        public void DumpDependencies(object @object)
         {
             List<object> dependenciesToRemove = new List<object>();
             
@@ -129,10 +117,5 @@ namespace DependencyInjection.Layers
                 dependenciesToRemove[i] = null;
             }
         }
-    }
-    
-    public class GenericInjectionLayer : InjectionLayer<InjectedAttribute>
-    {
-        
     }
 }

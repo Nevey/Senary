@@ -1,12 +1,12 @@
 using DependencyInjection;
-using Gameplay.InjectionLayers;
+using DependencyInjection.Attributes;
 using UnityEngine;
 
-namespace Gameplay
+namespace Gameplay.GameObjects
 {
     public class Sphere : MonoBehaviour
     {
-        [GameplayInjected] private Test test;
+        [Inject] private Test test;
         
         private void Awake()
         {

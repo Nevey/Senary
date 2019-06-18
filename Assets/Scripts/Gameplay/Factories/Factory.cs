@@ -1,7 +1,5 @@
 using DependencyInjection;
 using DependencyInjection.Attributes;
-using DependencyInjection.Layers;
-using Gameplay.InjectionLayers;
 using UnityEngine;
 
 namespace Gameplay.Factories
@@ -18,17 +16,17 @@ namespace Gameplay.Factories
     {
         [SerializeField] private T prefab;
 
-        [GameplayInjected] private FactoryMap factoryMap;
+        [Inject] private FactoryMap factoryMap;
 
         protected virtual void Awake()
         {
             Injector.Inject(this);
-            factoryMap.MapFactory(this);
+            factoryMap.AddFactory(this);
         }
 
         protected virtual void OnDestroy()
         {
-            factoryMap.UnMapFactory(this);
+            factoryMap.RemoveFactory(this);
             Injector.Dump(this);
         }
 
