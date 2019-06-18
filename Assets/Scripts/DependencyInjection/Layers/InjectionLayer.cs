@@ -53,7 +53,7 @@ namespace DependencyInjection.Layers
                     if (injectedInstance == null)
                     {
                         throw Log.Exception(
-                            $"Something went wrong while trying to assign Service of type {fieldInfo.FieldType}");
+                            $"Something went wrong while trying to assign Service of type <b>{fieldInfo.FieldType}</b>");
                     }
 
                     // Track references to this singleton injected instance
@@ -62,7 +62,7 @@ namespace DependencyInjection.Layers
                         if (references[injectedInstance].Contains(@object))
                         {
                             throw Log.Exception(
-                                $"Trying to use the same Service of type {fieldInfo.FieldType} twice in {@object}");
+                                $"Trying to use the same Service of type <b>{fieldInfo.FieldType}</b> twice in <b>{@object}</b>");
                         }
                         
                         references[injectedInstance].Add(@object);
@@ -72,15 +72,19 @@ namespace DependencyInjection.Layers
                         references[injectedInstance] = new List<object> {@object};
                     }
                     
-                    Log.Write($"Singleton {injectedInstance} has {references[injectedInstance].Count} references");
+                    Log.Write($"Singleton <b>{injectedInstance.GetType().Name}</b> has <b>{references[injectedInstance].Count}</b> reference(s)");
                 }
                 else
                 {
                     // TODO: Add Monobehaviour support
                     injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
+                    
+                    Log.Write($"Non-Singleton <b>{injectedInstance.GetType().Name}</b> was created");
                 }
                 
                 fieldInfo.SetValue(@object, injectedInstance);
+                
+                Log.Write($"<b>{injectedInstance.GetType().Name}</b> was injected into <b>{@object.GetType().Name}</b>");
             }
         }
 

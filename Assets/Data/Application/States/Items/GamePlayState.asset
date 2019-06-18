@@ -18,6 +18,11 @@ MonoBehaviour:
   scene:
     sceneAsset: {fileID: 102900000, guid: 86b8e1d913eddf94f9d4896179b09dbe, type: 3}
     scenePath: Assets/Scenes/Game.unity
-  selectedIndex: 1
-  selectedInjectionLayer: Gameplay.InjectionLayers.GameplayInjectionLayer, Assembly-CSharp,
-    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  useCustomInjectionLayers: 1
+  customInjectionLayerCount: 0
+  selectedIndices: 0200000001000000
+  selectedInjectionLayers:
+  - Gameplay.InjectionLayers.MainMenuInjectionLayer, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - Gameplay.InjectionLayers.GameplayInjectionLayer, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null

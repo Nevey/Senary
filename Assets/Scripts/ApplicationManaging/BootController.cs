@@ -8,7 +8,7 @@ namespace ApplicationManaging
         
         private void Awake()
         {
-            ApplicationManager.SetState(applicationMode.InitialState);
+            ApplicationManager.Start(applicationMode.InitialState);
             
             // This delay is just to test 
             Invoke(nameof(ToGamePlayState), 2f);
