@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DependencyInjection;
-using DependencyInjection.Layers;
 using UnityEngine.SceneManagement;
 using Utilities;
 

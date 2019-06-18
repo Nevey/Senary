@@ -1,6 +1,5 @@
 using System.Reflection;
 using DependencyInjection.Attributes;
-using DependencyInjection.Layers;
 using Utilities;
 
 namespace DependencyInjection
@@ -13,8 +12,8 @@ namespace DependencyInjection
 
             for (int i = 0; i < fieldInfos.Length; i++)
             {
-                InjectionLayer injectionLayer = InjectionLayerManager.GetInjectionLayer(fieldInfos[i]);
-                injectionLayer.InjectIntoField(fieldInfos[i], @object);
+                (InjectionLayer, InjectedAttribute) injectionLayer = InjectionLayerManager.GetInjectionLayer(fieldInfos[i]);
+                injectionLayer.Item1.InjectIntoField(fieldInfos[i], injectionLayer.Item2, @object);
             }
         }
 
@@ -24,8 +23,8 @@ namespace DependencyInjection
             
             for (int i = 0; i < fieldInfos.Length; i++)
             {
-                InjectionLayer injectionLayer = InjectionLayerManager.GetInjectionLayer(fieldInfos[i]);
-                injectionLayer.DumpDependencies(@object);
+                (InjectionLayer, InjectedAttribute) injectionLayer = InjectionLayerManager.GetInjectionLayer(fieldInfos[i]);
+                injectionLayer.Item1.DumpDependencies(@object);
             }
         }
     }

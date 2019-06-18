@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using DependencyInjection.Attributes;
-using DependencyInjection.Layers;
 using Utilities;
 
 namespace DependencyInjection
 {
     public static class InjectionLayerManager
     {
-        private static Dictionary<Type, InjectionLayer> injectionLayers = new Dictionary<Type, InjectionLayer>();
+        private static readonly Dictionary<Type, InjectionLayer> injectionLayers = new Dictionary<Type, InjectionLayer>();
 
         private static bool IsInjectionLayer(Type type)
         {
@@ -42,21 +41,21 @@ namespace DependencyInjection
             }
         }
         
-        public static InjectionLayer GetInjectionLayer(FieldInfo fieldInfo)
+        public static (InjectionLayer, InjectedAttribute) GetInjectionLayer(FieldInfo fieldInfo)
         {
             InjectedAttribute injectedAttribute = fieldInfo.FieldType.GetCustomAttribute<InjectedAttribute>();
             if (injectedAttribute == null)
             {
-                return null;
+                throw Log.Exception($"Class <b>{fieldInfo.FieldType.Name}</b> is missing <b>Injected</b> attribute");
             }
             
             Type type = injectedAttribute.Layer;
             if (injectionLayers.ContainsKey(type))
             {
-                return injectionLayers[type];
+                return (injectionLayers[type], injectedAttribute);
             }
 
-            return null;
+            throw Log.Exception($"InjectionLayer of type {type.Name} is not available! Please check your ApplicationStates");
         }
     }
 }

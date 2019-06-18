@@ -4,25 +4,17 @@ using System.Reflection;
 using DependencyInjection.Attributes;
 using Utilities;
 
-namespace DependencyInjection.Layers
+namespace DependencyInjection
 {
     public class InjectionLayer
     {
         private readonly Dictionary<Type, object> dependencies = new Dictionary<Type, object>();
         private readonly Dictionary<object, List<object>> references = new Dictionary<object, List<object>>();
 
-        public void InjectIntoField(FieldInfo fieldInfo, object @object)
+        public void InjectIntoField(FieldInfo fieldInfo, InjectedAttribute injectedAttribute, object @object)
         {
             object injectedInstance;
 
-            InjectedAttribute injectedAttribute = fieldInfo.FieldType.GetCustomAttribute<InjectedAttribute>();
-
-            if (injectedAttribute == null)
-            {
-                // TODO: Just do stuff or throw exception?
-                return;
-            }
-            
             if (injectedAttribute.Singleton)
             {
                 if (dependencies.ContainsKey(fieldInfo.FieldType))
@@ -38,7 +30,8 @@ namespace DependencyInjection.Layers
                 if (injectedInstance == null)
                 {
                     throw Log.Exception(
-                        $"Something went wrong while trying to assign Service of type <b>{fieldInfo.FieldType}</b>");
+                        $"Something went wrong while trying to assign " +
+                        $"Service of type <b>{fieldInfo.FieldType}</b>");
                 }
 
                 // Track references to this singleton injected instance
@@ -47,7 +40,8 @@ namespace DependencyInjection.Layers
                     if (references[injectedInstance].Contains(@object))
                     {
                         throw Log.Exception(
-                            $"Trying to use the same Service of type <b>{fieldInfo.FieldType}</b> twice in <b>{@object}</b>");
+                            $"Trying to use the same Service of type " +
+                            $"<b>{fieldInfo.FieldType}</b> twice in <b>{@object}</b>");
                     }
                     
                     references[injectedInstance].Add(@object);
@@ -57,7 +51,8 @@ namespace DependencyInjection.Layers
                     references[injectedInstance] = new List<object> {@object};
                 }
                 
-                Log.Write($"Singleton <b>{injectedInstance.GetType().Name}</b> has <b>{references[injectedInstance].Count}</b> reference(s)");
+                Log.Write($"Singleton <b>{injectedInstance.GetType().Name}</b> has " +
+                          $"<b>{references[injectedInstance].Count}</b> reference(s)");
             }
             else
             {
@@ -69,12 +64,13 @@ namespace DependencyInjection.Layers
             
             fieldInfo.SetValue(@object, injectedInstance);
             
-            Log.Write($"<b>{injectedInstance.GetType().Name}</b> was injected into <b>{@object.GetType().Name}</b>");
+            Log.Write($"<b>{injectedInstance.GetType().Name}</b> was " +
+                      $"injected into <b>{@object.GetType().Name}</b>");
         }
 
         public void DumpDependencies(object @object)
         {
-            List<object> dependenciesToRemove = new List<object>();
+            List<object> instancesToRemove = new List<object>();
             
             foreach (KeyValuePair<object, List<object>> keyValuePair in references)
             {
@@ -104,17 +100,22 @@ namespace DependencyInjection.Layers
                     }
 
                     dependencies.Remove(type);
-                    dependenciesToRemove.Add(injectedInstance);
+                    instancesToRemove.Add(injectedInstance);
                 }
             }
 
             // Finally remove references by key
-            for (int i = 0; i < dependenciesToRemove.Count; i++)
+            for (int i = 0; i < instancesToRemove.Count; i++)
             {
-                references.Remove(dependenciesToRemove[i]);
+                Log.Write(
+                    $"Removing <i>singleton</i> instance of " +
+                    $"<b>{instancesToRemove[i].GetType().Name}</b> as it has no more references left");
+                
+                references.Remove(instancesToRemove[i]);
                 
                 // TODO: Add Monobehaviour support
-                dependenciesToRemove[i] = null;
+                instancesToRemove[i] = null;
+                
             }
         }
     }
