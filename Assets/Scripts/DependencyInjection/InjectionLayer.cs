@@ -50,9 +50,6 @@ namespace DependencyInjection
                 {
                     references[injectedInstance] = new List<object> {@object};
                 }
-                
-                Log.Write($"Singleton <b>{injectedInstance.GetType().Name}</b> has " +
-                          $"<b>{references[injectedInstance].Count}</b> reference(s)");
             }
             else
             {
@@ -63,9 +60,18 @@ namespace DependencyInjection
             }
             
             fieldInfo.SetValue(@object, injectedInstance);
-            
-            Log.Write($"<b>{injectedInstance.GetType().Name}</b> was " +
-                      $"injected into <b>{@object.GetType().Name}</b>");
+
+            if (injectedAttribute.Singleton)
+            {
+                Log.Write($"Created <i>Singleton</i> instance <b>{injectedInstance.GetType().Name}</b> -- " +
+                          $"Injected into <b>{@object.GetType().Name}</b> -- " +
+                          $"Has <b>{references[injectedInstance].Count}</b> reference(s)");
+            }
+            else
+            {
+                Log.Write($"Created instance <b>{injectedInstance.GetType().Name}</b> -- " +
+                          $"Was injected into <b>{@object.GetType().Name}</b>");
+            }
         }
 
         public void DumpDependencies(object @object)
@@ -86,6 +92,11 @@ namespace DependencyInjection
                     }
                     
                     objects.RemoveAt(i);
+                    
+                    Log.Write($"<i>Singleton</i> instance <b>{injectedInstance.GetType().Name}</b> -- " +
+                              $"Dumped by <b>{@object.GetType().Name}</b> -- " +
+                              $"Has <b>{references[injectedInstance].Count}</b> reference(s)");
+                    
                     break;
                 }
 
@@ -108,14 +119,13 @@ namespace DependencyInjection
             for (int i = 0; i < instancesToRemove.Count; i++)
             {
                 Log.Write(
-                    $"Removing <i>singleton</i> instance of " +
+                    $"Clearing <i>Singleton</i> instance of " +
                     $"<b>{instancesToRemove[i].GetType().Name}</b> as it has no more references left");
                 
                 references.Remove(instancesToRemove[i]);
                 
                 // TODO: Add Monobehaviour support
                 instancesToRemove[i] = null;
-                
             }
         }
     }
