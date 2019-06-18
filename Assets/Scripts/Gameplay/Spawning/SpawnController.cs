@@ -1,3 +1,4 @@
+using DependencyInjection;
 using Gameplay.Factories;
 using Gameplay.InjectionLayers;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Gameplay.Spawning
         
         private void Start()
         {
-            GameplayInjectionLayer.Instance.InjectDependencies(this);
+            Injector.Inject(this);
 
             cubeFactory = factoryMap.GetFactory<CubeFactory>();
             sphereFactory = factoryMap.GetFactory<SphereFactory>();
@@ -27,7 +28,7 @@ namespace Gameplay.Spawning
 
         private void OnDestroy()
         {
-            GameplayInjectionLayer.Instance.DumpDependencies(this);
+            Injector.Dump(this);
         }
 
         private void SpawnCube()

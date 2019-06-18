@@ -1,3 +1,4 @@
+using DependencyInjection;
 using DependencyInjection.Attributes;
 using DependencyInjection.Layers;
 using Gameplay.InjectionLayers;
@@ -21,14 +22,14 @@ namespace Gameplay.Factories
 
         protected virtual void Awake()
         {
-            GameplayInjectionLayer.Instance.InjectDependencies(this);
+            Injector.Inject(this);
             factoryMap.MapFactory(this);
         }
 
         protected virtual void OnDestroy()
         {
             factoryMap.UnMapFactory(this);
-            GameplayInjectionLayer.Instance.DumpDependencies(this);
+            Injector.Dump(this);
         }
 
         public override MonoBehaviour Instantiate()

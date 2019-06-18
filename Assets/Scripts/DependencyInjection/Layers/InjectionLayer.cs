@@ -9,6 +9,7 @@ namespace DependencyInjection.Layers
     [Serializable]
     public abstract class InjectionLayer
     {
+        public abstract Type AttributeType { get; }
         public abstract void InjectDependencies(object @object);
         public abstract void DumpDependencies(object @object);
     }
@@ -17,13 +18,8 @@ namespace DependencyInjection.Layers
     {
         private readonly Dictionary<Type, object> dependencies = new Dictionary<Type, object>();
         private readonly Dictionary<object, List<object>> references = new Dictionary<object, List<object>>();
-        
-        public static InjectionLayer<T> Instance;
-        
-        protected InjectionLayer()
-        {
-            Instance = this;
-        }
+
+        public override Type AttributeType => typeof(T);
 
         public override void InjectDependencies(object @object)
         {

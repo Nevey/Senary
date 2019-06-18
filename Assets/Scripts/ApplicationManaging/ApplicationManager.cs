@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DependencyInjection;
 using DependencyInjection.Layers;
 using UnityEngine.SceneManagement;
 using Utilities;
@@ -8,7 +9,6 @@ namespace ApplicationManaging
 {
     public static class ApplicationManager
     {
-        private static Dictionary<Type, InjectionLayer> injectionLayers = new Dictionary<Type, InjectionLayer>();
         private static bool isStarted;
         private static ApplicationState currentState;
 
@@ -34,15 +34,7 @@ namespace ApplicationManaging
                     throw Log.Exception($"ApplicationState {currentState.name} has no eligible InjectionLayer selected!");
                 }
 
-                if (!injectionLayers.ContainsKey(type))
-                {
-                    injectionLayers[type] = (InjectionLayer)Activator.CreateInstance(type);
-                    Log.Write($"Instantiated new <b>{type.Name}</b>");
-                }
-                else
-                {
-                    Log.Write($"Using already instantiated <b>{type.Name}</b>");
-                }
+                InjectionLayerManager.CreateLayer(type);
             }
         }
         
@@ -111,7 +103,7 @@ namespace ApplicationManaging
             isStarted = true;
             
             // Create the default injection layer, in case you don't care about DI layering
-            injectionLayers.Add(typeof(GenericInjectionLayer), new GenericInjectionLayer());
+            InjectionLayerManager.CreateLayer(typeof(GenericInjectionLayer));
             SetState(initialState);
         }
     }

@@ -1,3 +1,4 @@
+using DependencyInjection;
 using Gameplay.InjectionLayers;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace Gameplay
         
         private void Awake()
         {
-            GameplayInjectionLayer.Instance.InjectDependencies(this);
+            Injector.Inject(this);
 
             test.testString = "Cube";
         }
