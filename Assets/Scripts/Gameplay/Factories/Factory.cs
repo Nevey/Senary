@@ -1,6 +1,6 @@
-using DependencyInjection;
-using DependencyInjection.Attributes;
+using DI;
 using UnityEngine;
+using MonoBehaviour = DI.MonoBehaviour;
 
 namespace Gameplay.Factories
 {
@@ -18,16 +18,16 @@ namespace Gameplay.Factories
 
         [Inject] private FactoryMap factoryMap;
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
-            Injector.Inject(this);
+            base.Awake();
             factoryMap.AddFactory(this);
         }
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
             factoryMap.RemoveFactory(this);
-            Injector.Dump(this);
+            base.OnDestroy();
         }
 
         public override MonoBehaviour Instantiate()

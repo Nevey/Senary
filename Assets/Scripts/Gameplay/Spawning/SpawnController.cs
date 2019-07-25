@@ -1,7 +1,7 @@
-using DependencyInjection;
-using DependencyInjection.Attributes;
+using DI;
 using Gameplay.Factories;
 using UnityEngine;
+using MonoBehaviour = DI.MonoBehaviour;
 using Random = UnityEngine.Random;
 
 namespace Gameplay.Spawning
@@ -14,21 +14,16 @@ namespace Gameplay.Spawning
 
         private CubeFactory cubeFactory;
         private SphereFactory sphereFactory;
-        
-        private void Start()
+
+        protected override void Start()
         {
-            Injector.Inject(this);
+            base.Start();
 
             cubeFactory = factoryMap.GetFactory<CubeFactory>();
             sphereFactory = factoryMap.GetFactory<SphereFactory>();
             
             InvokeRepeating(nameof(SpawnCube), 0.5f, 1f);
             InvokeRepeating(nameof(SpawnSphere), 1f, 1f);
-        }
-
-        private void OnDestroy()
-        {
-            Injector.Dump(this);
         }
 
         private void SpawnCube()

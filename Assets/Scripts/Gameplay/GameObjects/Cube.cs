@@ -1,18 +1,12 @@
-using DependencyInjection;
-using DependencyInjection.Attributes;
-using UnityEngine;
+using DI;
 
 namespace Gameplay
 {
     public class Cube : MonoBehaviour
     {
-        [Inject] private Test test;
-        
-        private void Awake()
+        protected override void Awake()
         {
-            Injector.Inject(this);
-
-            test.testString = "Cube";
+            base.Awake();
         }
 
         private void Update()

@@ -1,6 +1,6 @@
 using System;
 
-namespace DependencyInjection.Attributes
+namespace DI
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class InjectedAttribute : Attribute

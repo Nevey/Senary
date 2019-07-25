@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using DependencyInjection;
+using DI;
 using UnityEngine.SceneManagement;
 using Utilities;
 
@@ -66,6 +66,11 @@ namespace ApplicationManaging
 
             for (int i = 0; i < scenesToClose.Count; i++)
             {
+                if (scenesToClose[i].buildIndex == 0)
+                {
+                    continue;
+                }
+                
                 SceneManager.UnloadSceneAsync(scenesToClose[i].buildIndex);
             }
         }

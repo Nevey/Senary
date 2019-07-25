@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using DependencyInjection.Attributes;
+using DI;
 using Gameplay.InjectionLayers;
 using Utilities;
 

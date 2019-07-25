@@ -1,4 +1,4 @@
-using DependencyInjection;
+using DI;
 
 namespace Gameplay.InjectionLayers
 {

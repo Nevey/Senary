@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DependencyInjection;
+using DI;
 using Paladin.Framework.Extensions;
 using UnityEditor;
 using UnityEngine;

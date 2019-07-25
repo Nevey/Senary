@@ -1,8 +1,8 @@
-using UnityEngine;
+using DI;
 
 namespace Gameplay.GameObjects
 {
-    public class Card : MonoBehaviour
+    public class Card : MonoBehaviour 
     {
         
     }

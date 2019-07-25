@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using DependencyInjection.Attributes;
 using Utilities;
 
-namespace DependencyInjection
+namespace DI
 {
     public static class InjectionLayerManager
     {
