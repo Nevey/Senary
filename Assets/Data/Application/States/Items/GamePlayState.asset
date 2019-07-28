@@ -19,7 +19,6 @@ MonoBehaviour:
     sceneAsset: {fileID: 102900000, guid: 86b8e1d913eddf94f9d4896179b09dbe, type: 3}
     scenePath: Assets/Scenes/Game.unity
   useCustomInjectionLayers: 1
-  customInjectionLayerCount: 0
   selectedIndices: 0200000001000000
   selectedInjectionLayers:
   - Gameplay.InjectionLayers.MainMenuInjectionLayer, Assembly-CSharp, Version=0.0.0.0,
