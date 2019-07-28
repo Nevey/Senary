@@ -15,6 +15,11 @@ namespace Gameplay.Grid
             renderer = GetComponent<Renderer>();
         }
 
+        public void Cleanup()
+        {
+            Destroy(gameObject);
+        }
+
         public void SetPosition(Coords coords)
         {
             Vector3 position = transform.position;

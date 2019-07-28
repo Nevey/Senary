@@ -22,5 +22,13 @@ namespace Gameplay.Grid
                 }
             }
         }
+
+        public void Cleanup()
+        {
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                tiles[i].Cleanup();
+            }
+        }
     }
 }

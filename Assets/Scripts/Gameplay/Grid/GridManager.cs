@@ -13,5 +13,10 @@ namespace Gameplay.Grid
         {
             grid = new Grid(new Vector2Int(10, 10));
         }
+
+        public void Cleanup()
+        {
+            grid.Cleanup();
+        }
     }
 }

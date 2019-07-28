@@ -20,5 +20,11 @@ namespace Gameplay.Grid
             tileView = (TileView)tileViewFactory.Instantiate();
             tileView.SetPosition(coords); 
         }
+
+        public void Cleanup()
+        {
+            Injector.Dump(this);
+            tileView.Cleanup();
+        }
     }
 }
