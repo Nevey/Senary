@@ -2,7 +2,7 @@ using DI;
 using UnityEngine;
 using MonoBehaviour = DI.MonoBehaviour;
 
-namespace Gameplay.Factories
+namespace Factories
 {
     public abstract class Factory : MonoBehaviour
     {
@@ -16,17 +16,17 @@ namespace Gameplay.Factories
     {
         [SerializeField] private T prefab;
 
-        [Inject] private FactoryMap factoryMap;
+        [Inject] private FactoryManager factoryManager;
 
         protected override void Awake()
         {
             base.Awake();
-            factoryMap.AddFactory(this);
+            factoryManager.AddFactory(this);
         }
 
         protected override void OnDestroy()
         {
-            factoryMap.RemoveFactory(this);
+            factoryManager.RemoveFactory(this);
             base.OnDestroy();
         }
 

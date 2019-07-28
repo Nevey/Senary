@@ -3,10 +3,10 @@ using DI;
 using Gameplay.InjectionLayers;
 using Utilities;
 
-namespace Gameplay.Factories
+namespace Factories
 {
     [Injected(Layer = typeof(GameplayInjectionLayer), Singleton = true)]
-    public class FactoryMap
+    public class FactoryManager
     {
         // TODO: Vamp into dict
         private readonly List<Factory> factoryMap = new List<Factory>();

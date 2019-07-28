@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Utilities;
+using Object = UnityEngine.Object;
 
 namespace DI
 {
@@ -22,8 +23,14 @@ namespace DI
                 }
                 else
                 {
-                    // TODO: Add Monobehaviour support
-                    dependencies[fieldInfo.FieldType] = injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
+                    if (fieldInfo.FieldType.IsSubclassOf(typeof(MonoBehaviour)))
+                    {
+                        dependencies[fieldInfo.FieldType] = injectedInstance = Object.FindObjectOfType(fieldInfo.FieldType);
+                    }
+                    else
+                    {
+                        dependencies[fieldInfo.FieldType] = injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
+                    }
                 }
 
                 if (injectedInstance == null)
@@ -52,6 +59,11 @@ namespace DI
             }
             else
             {
+                if (fieldInfo.FieldType.IsSubclassOf(typeof(MonoBehaviour)))
+                {
+                    throw Log.Exception($"Non-Singleton Monobehaviour support is not added yet!");
+                }
+                
                 // TODO: Add Monobehaviour support
                 injectedInstance = Activator.CreateInstance(fieldInfo.FieldType);
                 
@@ -62,8 +74,8 @@ namespace DI
 
             if (injectedAttribute.Singleton)
             {
-                Log.Write($"Created <i>Singleton</i> instance <b>{injectedInstance.GetType().Name}</b> -- " +
-                          $"Injected into <b>{@object.GetType().Name}</b> -- " +
+                Log.Write($"Injected <i>Singleton</i> instance <b>{injectedInstance.GetType().Name}</b> " +
+                          $"into <b>{@object.GetType().Name}</b> -- " +
                           $"Has <b>{references[injectedInstance].Count}</b> reference(s)");
             }
             else
