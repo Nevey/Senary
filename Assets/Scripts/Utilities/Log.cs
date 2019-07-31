@@ -38,7 +38,7 @@ namespace Utilities
             return color;
         }
 
-        private static string GetString(string s)
+        private static string GetString(object message)
         {
             Type type = GetCallerType();
 
@@ -49,7 +49,7 @@ namespace Utilities
 
             string typeName = type == null ? "Unknown Source" : type.Name;
 
-            return $"<color=#{colorString}>[{typeName}:{methodName}]</color> - {s}";
+            return $"<color=#{colorString}>[{typeName}:{methodName}]</color> - {message}";
         }
 
         private static Type GetCallerType()
@@ -64,7 +64,7 @@ namespace Utilities
             return stackTrace.GetFrame(4)?.GetMethod()?.Name;
         }
 
-        private static void DoLog(string methodName, string message)
+        private static void DoLog(string methodName, object message)
         {
             string fullMessage = GetString(message);
 
@@ -87,22 +87,22 @@ namespace Utilities
             }
         }
 
-        public static void Write(string message)
+        public static void Write(object message)
         {
             DoLog("Log", message);
         }
 
-        public static void Warn(string message)
+        public static void Warn(object message)
         {
             DoLog("LogWarning", message);
         }
 
-        public static void Error(string message)
+        public static void Error(object message)
         {
             DoLog("LogError", message);
         }
 
-        public static Exception Exception(string message)
+        public static Exception Exception(object message)
         {
             throw new Exception(GetString(message));
         }
