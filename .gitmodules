@@ -1,6 +1,3 @@
 [submodule "Assets/Framework-DynamicEnums"]
 	path = Assets/Framework-DynamicEnums
 	url = https://github.com/PaladinStudiosBVs/Framework-DynamicEnums.git
-[submodule "Assets/Framework-Core"]
-	path = Assets/Framework-Core
-	url = https://github.com/PaladinStudiosBVs/Framework-Core.git
