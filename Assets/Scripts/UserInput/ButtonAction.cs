@@ -6,24 +6,24 @@ namespace UserInput
     {
         private readonly KeyCode keyCode;
         
-        private bool isUp;
+        private bool isReleased;
         private bool isHeld;
-        private bool isDown;
+        private bool isPressed;
 
         /// <summary>
-        /// Will be true for one frame when a button is released
+        /// Will be true for one frame when a button is pressed
         /// </summary>
-        public bool IsUp => isUp;
-        
+        public bool IsPressed => isPressed;
+
         /// <summary>
         /// Will be true as long as the button is pressed
         /// </summary>
         public bool IsHeld => isHeld;
-        
+
         /// <summary>
-        /// Will be true for one frame when a button is pressed
+        /// Will be true for one frame when a button is released
         /// </summary>
-        public bool IsDown => isDown;
+        public bool IsReleased => isReleased;
 
         public ButtonAction(KeyCode keyCode)
         {
@@ -32,16 +32,16 @@ namespace UserInput
 
         public override void Update()
         {
-            isUp = Input.GetKeyUp(keyCode);
+            isPressed = Input.GetKeyDown(keyCode);
             isHeld = Input.GetKey(keyCode);
-            isDown = Input.GetKeyDown(keyCode);
+            isReleased = Input.GetKeyUp(keyCode);
         }
 
         public override void Reset()
         {
-            isUp = false;
+            isPressed = false;
             isHeld = false;
-            isDown = false;
+            isReleased = false;
         }
     }
 }

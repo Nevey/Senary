@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 using Utilities;
 
-namespace ApplicationManaging
+namespace AppManagement
 {
     [CreateAssetMenu(fileName = "ApplicationMode", menuName = "Application/ApplicationMode")]
     public class ApplicationMode : ScriptableObject
@@ -19,6 +19,19 @@ namespace ApplicationManaging
             {
                 throw Log.Exception("Initial state not included in application state list!");
             }
+        }
+
+        public ApplicationState GetApplicationState(ApplicationStateEnum stateEnum)
+        {
+            for (int i = 0; i < applicationStates.Length; i++)
+            {
+                if (applicationStates[i].StateEnum == stateEnum)
+                {
+                    return applicationStates[i];
+                }
+            }
+
+            throw Log.Exception($"No ApplicationState found with Enum value {stateEnum}");
         }
     }
 }

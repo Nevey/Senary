@@ -2,9 +2,9 @@ using System;
 using UnityEngine;
 using Utilities;
 
-namespace ApplicationManaging
+namespace AppManagement
 {
-    public enum AppState
+    public enum ApplicationStateEnum
     {
         Boot,
         Gameplay,
@@ -14,13 +14,14 @@ namespace ApplicationManaging
     public class ApplicationState : ScriptableObject
     {
         [SerializeField] private SceneReference scene;
-        [SerializeField] private AppState state;
+        [SerializeField] private AppState appState;
+        [SerializeField] private ApplicationStateEnum stateEnum;
         [SerializeField, HideInInspector] private bool useCustomInjectionLayers;
         [SerializeField, HideInInspector] private int[] selectedIndices;
         [SerializeField, HideInInspector] private string[] selectedInjectionLayers;
 
         public SceneReference Scene => scene;
-        public AppState State => state;
+        public ApplicationStateEnum StateEnum => stateEnum;
         public bool UseCustomInjectionLayers => useCustomInjectionLayers;
         public string[] SelectedInjectionLayers => selectedInjectionLayers;
 

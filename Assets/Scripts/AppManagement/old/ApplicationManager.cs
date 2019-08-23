@@ -1,17 +1,16 @@
-using System.Runtime.CompilerServices;
 using System;
 using System.Collections.Generic;
 using DI;
 using UnityEngine.SceneManagement;
 using Utilities;
 
-namespace ApplicationManaging
+namespace AppManagement
 {
     public static class ApplicationManager
     {
         private static bool isStarted;
         private static ApplicationState currentState;
-        private static Dictionary<AppState, ApplicationState> applicationStates = new Dictionary<AppState, ApplicationState>();
+        private static Dictionary<ApplicationStateEnum, ApplicationState> applicationStates = new Dictionary<ApplicationStateEnum, ApplicationState>();
 
         public static ApplicationState CurrentState => currentState;
 
@@ -85,15 +84,15 @@ namespace ApplicationManaging
         /// <summary>
         ///
         /// </summary>
-        /// <param name="newState"></param>
-        public static void SetState(AppState newState)
+        /// <param name="newStateEnum"></param>
+        public static void SetState(ApplicationStateEnum newStateEnum)
         {
             if (!isStarted)
             {
                 throw Log.Exception("Cannot set state if not yet started!");
             }
 
-            currentState = applicationStates[newState];
+            currentState = applicationStates[newStateEnum];
 
             CreateRequiredInjectionLayers();
             OpenAndCloseScenes();
@@ -104,7 +103,7 @@ namespace ApplicationManaging
             for (int i = 0; i < states.Length; i++)
             {
                 ApplicationState applicationState = states[i];
-                applicationStates[applicationState.State] = applicationState;
+                applicationStates[applicationState.StateEnum] = applicationState;
             }
         }
 
@@ -112,14 +111,14 @@ namespace ApplicationManaging
         /// Starts the application manager, creates the default injection layer and sets
         /// the initially given application state
         /// </summary>
-        /// <param name="initialState"></param>
-        public static void Start(AppState initialState)
+        /// <param name="initialStateEnum"></param>
+        public static void Start(ApplicationStateEnum initialStateEnum)
         {
             isStarted = true;
 
             // Create the default injection layer, in case you don't care about DI layering
             InjectionLayerManager.CreateLayer(typeof(InjectionLayer));
-            SetState(initialState);
+            SetState(initialStateEnum);
         }
     }
 }

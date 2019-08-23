@@ -6,15 +6,17 @@ using UnityEditor;
 using UnityEngine;
 using Utilities;
 
-namespace ApplicationManaging.Editor
+namespace AppManagement.Editor
 {
     [CustomEditor(typeof(ApplicationState))]
     public class ApplicationStateEditor : UnityEditor.Editor
     {
+        private SerializedProperty appState;
         private SerializedProperty selectedIndices;
         private SerializedProperty useCustomInjectionLayers;
         private SerializedProperty selectedInjectionLayers;
 
+        private string[] appStates;
         private string[] injectionLayerTypes;
         private string[] injectionLayerAssemblyQualifiedNames;
         private int injectionLayerIndex;
@@ -22,10 +24,11 @@ namespace ApplicationManaging.Editor
         private void OnEnable()
         {
             // Initialize serialized properties
+            appState = serializedObject.FindProperty("appState");
             selectedIndices = serializedObject.FindProperty("selectedIndices");
             useCustomInjectionLayers = serializedObject.FindProperty("useCustomInjectionLayers");
             selectedInjectionLayers = serializedObject.FindProperty("selectedInjectionLayers");
-
+            
             // Initialize selectable injection layer array
             List<Type> types = Reflection.GetTypes<InjectionLayer>().ToList();
             List<string> typesToString = new List<string>();
@@ -54,9 +57,18 @@ namespace ApplicationManaging.Editor
 
             EditorGUILayout.Space();
 
+            DrawAppStates();
+
+            EditorGUILayout.Space();
+
             DrawInjectionLayers();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawAppStates()
+        {
+
         }
 
         private void DrawInjectionLayers()
@@ -81,9 +93,12 @@ namespace ApplicationManaging.Editor
                 index = EditorGUILayout.Popup(index, injectionLayerTypes);
                 selectedIndices.GetArrayElementAtIndex(i).intValue = index;
 
-                string layer = selectedInjectionLayers.GetArrayElementAtIndex(i).stringValue;
-                layer = injectionLayerAssemblyQualifiedNames[index];
-                selectedInjectionLayers.GetArrayElementAtIndex(i).stringValue = layer;
+                if (index < injectionLayerAssemblyQualifiedNames.Length)
+                {
+                    string layer = selectedInjectionLayers.GetArrayElementAtIndex(i).stringValue;
+                    layer = injectionLayerAssemblyQualifiedNames[index];
+                    selectedInjectionLayers.GetArrayElementAtIndex(i).stringValue = layer;
+                }
 
                 if (GUILayout.Button("Remove"))
                 {
@@ -102,8 +117,11 @@ namespace ApplicationManaging.Editor
 
             if (GUILayout.Button("Add"))
             {
-                // selectedIndices.AddArrayElement();
-                // selectedInjectionLayers.AddArrayElement();
+                selectedIndices.InsertArrayElementAtIndex(selectedIndices.arraySize);
+                selectedIndices.GetArrayElementAtIndex(selectedIndices.arraySize - 1).intValue = selectedIndices.arraySize;
+
+                selectedInjectionLayers.InsertArrayElementAtIndex(selectedInjectionLayers.arraySize);
+                selectedInjectionLayers.GetArrayElementAtIndex(selectedInjectionLayers.arraySize - 1).stringValue = "";
             }
 
             EditorGUILayout.EndHorizontal();

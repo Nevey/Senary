@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AppManagement;
 using UnityEngine;
 using Utilities;
 using MonoBehaviour = DI.MonoBehaviour;
@@ -10,6 +11,11 @@ namespace UserInput
     {
         private readonly List<ActionSet> actionSets = new List<ActionSet>();
 
+        protected override void Awake()
+        {
+            DontDestroyOnLoad(this);
+        }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -18,17 +24,6 @@ namespace UserInput
             {
                 actionSets[i].Unbind();
             }
-        }
-
-        protected void AddActionSet(ActionSet actionSet)
-        {
-            if (actionSets.Contains(actionSet))
-            {
-                Log.Warn($"ActionSet {actionSet.GetType().Name} was already registered...");
-                return;
-            }
-            
-            actionSets.Add(actionSet);
         }
 
         protected virtual void Update()
@@ -44,6 +39,17 @@ namespace UserInput
                 
                 actionSet.Update();
             }
+        }
+
+        protected void AddActionSet(ActionSet actionSet)
+        {
+            if (actionSets.Contains(actionSet))
+            {
+                Log.Warn($"ActionSet {actionSet.GetType().Name} was already registered...");
+                return;
+            }
+            
+            actionSets.Add(actionSet);
         }
     }
 }
