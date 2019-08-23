@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System;
 using System.Collections.Generic;
 using DI;
@@ -10,6 +11,7 @@ namespace ApplicationManaging
     {
         private static bool isStarted;
         private static ApplicationState currentState;
+        private static Dictionary<AppState, ApplicationState> applicationStates = new Dictionary<AppState, ApplicationState>();
 
         public static ApplicationState CurrentState => currentState;
 
@@ -23,7 +25,7 @@ namespace ApplicationManaging
             {
                 return;
             }
-            
+
             for (int i = 0; i < currentState.SelectedInjectionLayers.Length; i++)
             {
                 Type type = Type.GetType(currentState.SelectedInjectionLayers[i]);
@@ -36,7 +38,7 @@ namespace ApplicationManaging
                 InjectionLayerManager.CreateLayer(type);
             }
         }
-        
+
         /// <summary>
         /// Opens the required scenes, closes any scenes not required
         /// </summary>
@@ -70,7 +72,7 @@ namespace ApplicationManaging
                 {
                     continue;
                 }
-                
+
                 SceneManager.UnloadSceneAsync(scenesToClose[i].buildIndex);
             }
         }
@@ -81,20 +83,29 @@ namespace ApplicationManaging
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="newState"></param>
-        public static void SetState(ApplicationState newState)
+        public static void SetState(AppState newState)
         {
             if (!isStarted)
             {
                 throw Log.Exception("Cannot set state if not yet started!");
             }
-            
-            currentState = newState;
-            
+
+            currentState = applicationStates[newState];
+
             CreateRequiredInjectionLayers();
             OpenAndCloseScenes();
+        }
+
+        public static void RegisterApplicationStates(ApplicationState[] states)
+        {
+            for (int i = 0; i < states.Length; i++)
+            {
+                ApplicationState applicationState = states[i];
+                applicationStates[applicationState.State] = applicationState;
+            }
         }
 
         /// <summary>
@@ -102,10 +113,10 @@ namespace ApplicationManaging
         /// the initially given application state
         /// </summary>
         /// <param name="initialState"></param>
-        public static void Start(ApplicationState initialState)
+        public static void Start(AppState initialState)
         {
             isStarted = true;
-            
+
             // Create the default injection layer, in case you don't care about DI layering
             InjectionLayerManager.CreateLayer(typeof(InjectionLayer));
             SetState(initialState);

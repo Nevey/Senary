@@ -1,29 +1,35 @@
 using System;
-using Paladin.Framework.Enums;
 using UnityEngine;
 using Utilities;
 
 namespace ApplicationManaging
 {
-    public partial class ApplicationState : EnumItem
+    public enum AppState
+    {
+        Boot,
+        Gameplay,
+    }
+
+    [CreateAssetMenu(fileName = "ApplicationState", menuName = "ApplicationManaging/ApplicationState")]
+    public class ApplicationState : ScriptableObject
     {
         [SerializeField] private SceneReference scene;
+        [SerializeField] private AppState state;
         [SerializeField, HideInInspector] private bool useCustomInjectionLayers;
         [SerializeField, HideInInspector] private int[] selectedIndices;
         [SerializeField, HideInInspector] private string[] selectedInjectionLayers;
 
         public SceneReference Scene => scene;
+        public AppState State => state;
         public bool UseCustomInjectionLayers => useCustomInjectionLayers;
         public string[] SelectedInjectionLayers => selectedInjectionLayers;
 
-        public override void OnValidate()
+        public void OnValidate()
         {
-            base.OnValidate();
-
             for (int i = 0; i < selectedInjectionLayers.Length; i++)
             {
                 string s = selectedInjectionLayers[i];
-                
+
                 for (int k = 0; k < selectedInjectionLayers.Length; k++)
                 {
                     if (k == i)

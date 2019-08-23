@@ -10,20 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94a3103d4ea84e2b825092e7e5fb4611, type: 3}
-  m_Name: BootState
+  m_Name: GamePlayState
   m_EditorClassIdentifier: 
-  parentEnum: {fileID: 11400000, guid: 81d6ba6b0b2c3ee488eb1596c3ffa676, type: 2}
-  guid: 111e9ccd68d971745a25c739dbdd1dd1
-  name: BootState
   scene:
-    sceneAsset: {fileID: 102900000, guid: 593612eada9404845940d4b1026f1912, type: 3}
-    scenePath: Assets/Scenes/Boot.unity
-  useCustomInjectionLayers: 0
-  selectedIndices: 020000000100000000000000
+    sceneAsset: {fileID: 102900000, guid: 86b8e1d913eddf94f9d4896179b09dbe, type: 3}
+    scenePath: Assets/Scenes/Game.unity
+  state: 0
+  useCustomInjectionLayers: 1
+  selectedIndices: 0200000001000000
   selectedInjectionLayers:
   - Gameplay.InjectionLayers.MainMenuInjectionLayer, Assembly-CSharp, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
   - Gameplay.InjectionLayers.GameplayInjectionLayer, Assembly-CSharp, Version=0.0.0.0,
-    Culture=neutral, PublicKeyToken=null
-  - DependencyInjection.Layers.GenericInjectionLayer, Assembly-CSharp, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
