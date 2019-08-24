@@ -8,10 +8,9 @@ using Utilities;
 
 namespace AppManagement.Editor
 {
-    [CustomEditor(typeof(ApplicationState))]
-    public class ApplicationStateEditor : UnityEditor.Editor
+    [CustomEditor(typeof(AppStateConfig))]
+    public class AppStateConfigEditor : UnityEditor.Editor
     {
-        private SerializedProperty appState;
         private SerializedProperty selectedIndices;
         private SerializedProperty useCustomInjectionLayers;
         private SerializedProperty selectedInjectionLayers;
@@ -24,7 +23,6 @@ namespace AppManagement.Editor
         private void OnEnable()
         {
             // Initialize serialized properties
-            appState = serializedObject.FindProperty("appState");
             selectedIndices = serializedObject.FindProperty("selectedIndices");
             useCustomInjectionLayers = serializedObject.FindProperty("useCustomInjectionLayers");
             selectedInjectionLayers = serializedObject.FindProperty("selectedInjectionLayers");

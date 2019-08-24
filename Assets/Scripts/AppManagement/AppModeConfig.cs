@@ -4,14 +4,14 @@ using Utilities;
 
 namespace AppManagement
 {
-    [CreateAssetMenu(fileName = "ApplicationMode", menuName = "Application/ApplicationMode")]
-    public class ApplicationMode : ScriptableObject
+    [CreateAssetMenu(fileName = "AppModeConfig", menuName = "AppManagement/AppModeConfig")]
+    public class AppModeConfig : ScriptableObject
     {
-        [SerializeField] private ApplicationState[] applicationStates;
-        [SerializeField] private ApplicationState initialState;
+        [SerializeField] private AppStateConfig[] applicationStates;
+        [SerializeField] private AppStateConfig initialState;
 
-        public ApplicationState[] ApplicationStates => applicationStates;
-        public ApplicationState InitialState => initialState;
+        public AppStateConfig[] ApplicationStates => applicationStates;
+        public AppStateConfig InitialState => initialState;
 
         private void OnValidate()
         {
@@ -21,7 +21,7 @@ namespace AppManagement
             }
         }
 
-        public ApplicationState GetApplicationState(ApplicationStateEnum stateEnum)
+        public AppStateConfig GetApplicationState(AppStateEnum stateEnum)
         {
             for (int i = 0; i < applicationStates.Length; i++)
             {

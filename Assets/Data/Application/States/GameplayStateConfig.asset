@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94a3103d4ea84e2b825092e7e5fb4611, type: 3}
-  m_Name: ApplicationState
+  m_Script: {fileID: 11500000, guid: c4859c426920cb041b368b282fda617e, type: 3}
+  m_Name: GameplayStateConfig
   m_EditorClassIdentifier: 
   scene:
     sceneAsset: {fileID: 102900000, guid: 86b8e1d913eddf94f9d4896179b09dbe, type: 3}
     scenePath: Assets/Scenes/Game.unity
   stateEnum: 1
   useCustomInjectionLayers: 1
-  selectedIndices: 0100000002000000
+  selectedIndices: 0200000001000000
   selectedInjectionLayers:
-  - Gameplay.InjectionLayers.GameplayInjectionLayer, Assembly-CSharp, Version=0.0.0.0,
-    Culture=neutral, PublicKeyToken=null
   - Gameplay.InjectionLayers.MainMenuInjectionLayer, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - Gameplay.InjectionLayers.GameplayInjectionLayer, Assembly-CSharp, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null

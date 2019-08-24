@@ -4,24 +4,17 @@ using Utilities;
 
 namespace AppManagement
 {
-    public enum ApplicationStateEnum
-    {
-        Boot,
-        Gameplay,
-    }
-
-    [CreateAssetMenu(fileName = "ApplicationState", menuName = "ApplicationManaging/ApplicationState")]
-    public class ApplicationState : ScriptableObject
+    [CreateAssetMenu(fileName = "AppStateConfig", menuName = "AppManagement/AppStateConfig")]
+    public class AppStateConfig : ScriptableObject
     {
         [SerializeField] private SceneReference scene;
-        [SerializeField] private AppState appState;
-        [SerializeField] private ApplicationStateEnum stateEnum;
+        [SerializeField] private AppStateEnum stateEnum;
         [SerializeField, HideInInspector] private bool useCustomInjectionLayers;
         [SerializeField, HideInInspector] private int[] selectedIndices;
         [SerializeField, HideInInspector] private string[] selectedInjectionLayers;
 
         public SceneReference Scene => scene;
-        public ApplicationStateEnum StateEnum => stateEnum;
+        public AppStateEnum StateEnum => stateEnum;
         public bool UseCustomInjectionLayers => useCustomInjectionLayers;
         public string[] SelectedInjectionLayers => selectedInjectionLayers;
 
@@ -41,7 +34,7 @@ namespace AppManagement
                     if (s == selectedInjectionLayers[k])
                     {
                         Type type = Type.GetType(s);
-                        Log.Error($"Duplicate InjectionLayer <b>{type.Name}</b> found in ApplicationState <b>{name}</b>");
+                        Log.Error($"Duplicate InjectionLayer <b>{type.Name}</b> found in AppStateConfig <b>{name}</b>");
                     }
                 }
             }

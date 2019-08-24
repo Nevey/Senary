@@ -6,13 +6,14 @@ using Utilities;
 
 namespace AppManagement
 {
-    public static class ApplicationManager
+    public static class AppManager
     {
+        private static AppModeConfig appModeConfig;
         private static bool isStarted;
-        private static ApplicationState currentState;
-        private static Dictionary<ApplicationStateEnum, ApplicationState> applicationStates = new Dictionary<ApplicationStateEnum, ApplicationState>();
+        private static AppStateConfig currentState;
+        private static Dictionary<AppStateEnum, AppStateConfig> applicationStates = new Dictionary<AppStateEnum, AppStateConfig>();
 
-        public static ApplicationState CurrentState => currentState;
+        public static AppStateConfig CurrentState => currentState;
 
         /// <summary>
         /// Create required injection layers, if it's not created yet
@@ -85,7 +86,7 @@ namespace AppManagement
         ///
         /// </summary>
         /// <param name="newStateEnum"></param>
-        public static void SetState(ApplicationStateEnum newStateEnum)
+        public static void SetState(AppStateEnum newStateEnum)
         {
             if (!isStarted)
             {
@@ -98,11 +99,13 @@ namespace AppManagement
             OpenAndCloseScenes();
         }
 
-        public static void RegisterApplicationStates(ApplicationState[] states)
+        public static void Setup(AppModeConfig config)
         {
-            for (int i = 0; i < states.Length; i++)
+            appModeConfig = config;
+
+            for (int i = 0; i < config.ApplicationStates.Length; i++)
             {
-                ApplicationState applicationState = states[i];
+                AppStateConfig applicationState = config.ApplicationStates[i];
                 applicationStates[applicationState.StateEnum] = applicationState;
             }
         }
@@ -111,14 +114,13 @@ namespace AppManagement
         /// Starts the application manager, creates the default injection layer and sets
         /// the initially given application state
         /// </summary>
-        /// <param name="initialStateEnum"></param>
-        public static void Start(ApplicationStateEnum initialStateEnum)
+        public static void Start()
         {
             isStarted = true;
 
             // Create the default injection layer, in case you don't care about DI layering
             InjectionLayerManager.CreateLayer(typeof(InjectionLayer));
-            SetState(initialStateEnum);
+            SetState(appModeConfig.InitialState.StateEnum);
         }
     }
 }
