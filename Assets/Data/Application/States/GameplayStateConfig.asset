@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4859c426920cb041b368b282fda617e, type: 3}
   m_Name: GameplayStateConfig
   m_EditorClassIdentifier: 
-  scene:
-    sceneAsset: {fileID: 102900000, guid: 86b8e1d913eddf94f9d4896179b09dbe, type: 3}
+  scenes:
+  - sceneAsset: {fileID: 102900000, guid: 86b8e1d913eddf94f9d4896179b09dbe, type: 3}
     scenePath: Assets/Scenes/Game.unity
+  - sceneAsset: {fileID: 102900000, guid: a0cffc6b7353c4448a795e8d58e7d251, type: 3}
+    scenePath: Assets/Scenes/Input.unity
   stateEnum: 1
   useCustomInjectionLayers: 1
   selectedIndices: 0200000001000000

@@ -1,4 +1,3 @@
-using AppManagement;
 using DI;
 using UserInput;
 
@@ -8,25 +7,17 @@ namespace Gameplay.UserInput
     public class GameplayInputManager : InputManager
     {
         private GameplayActionSet gameplayActionSet = new GameplayActionSet();
-        private ButtonActionSet buttonActionSet = new ButtonActionSet();
+        private MouseButtonActionSet mouseButtonActionSet = new MouseButtonActionSet();
 
         public GameplayActionSet GameplayActionSet => gameplayActionSet;
-        public ButtonActionSet ButtonActionSet => buttonActionSet;
+        public MouseButtonActionSet ButtonActionSet => mouseButtonActionSet;
 
         protected override void Awake()
         {
             base.Awake();
 
             AddActionSet(gameplayActionSet);
-            AddActionSet(buttonActionSet);
-            
-            gameplayActionSet.Bind();
-            buttonActionSet.Bind();
-        }
-
-        protected override void Update()
-        {
-            base.Update();
+            AddActionSet(mouseButtonActionSet);
         }
     }
 }

@@ -3,13 +3,13 @@ using UserInput;
 
 namespace Gameplay.UserInput
 {
-    public class ButtonActionSet : ActionSet
+    public class MouseButtonActionSet : ActionSet
     {
         private ButtonAction mouseButtonAction;
 
         public ButtonAction MouseButtonAction => mouseButtonAction;
 
-        public ButtonActionSet()
+        public MouseButtonActionSet()
         {
             mouseButtonAction = CreateButtonAction(KeyCode.Mouse0);
         }

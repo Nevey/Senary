@@ -7,13 +7,13 @@ namespace AppManagement
     [CreateAssetMenu(fileName = "AppStateConfig", menuName = "AppManagement/AppStateConfig")]
     public class AppStateConfig : ScriptableObject
     {
-        [SerializeField] private SceneReference scene;
+        [SerializeField] private SceneReference[] scenes;
         [SerializeField] private AppStateEnum stateEnum;
         [SerializeField, HideInInspector] private bool useCustomInjectionLayers;
         [SerializeField, HideInInspector] private int[] selectedIndices;
         [SerializeField, HideInInspector] private string[] selectedInjectionLayers;
 
-        public SceneReference Scene => scene;
+        public SceneReference[] Scenes => scenes;
         public AppStateEnum StateEnum => stateEnum;
         public bool UseCustomInjectionLayers => useCustomInjectionLayers;
         public string[] SelectedInjectionLayers => selectedInjectionLayers;

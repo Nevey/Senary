@@ -48,22 +48,26 @@ namespace AppManagement
 
             bool newSceneIsAlreadyLoaded = false;
 
-            for (int i = 0; i < SceneManager.sceneCount; i++)
+            for (int k = 0; k < currentState.Scenes.Length; k++)
             {
-                Scene scene = SceneManager.GetSceneAt(i);
-
-                if (currentState.Scene.Name.Equals(scene.name))
+                for (int i = 0; i < SceneManager.sceneCount; i++)
                 {
-                    newSceneIsAlreadyLoaded = true;
-                    continue;
+                    Scene scene = SceneManager.GetSceneAt(i);
+
+                    if (currentState.Scenes[k].Name.Equals(scene.name))
+                    {
+                        newSceneIsAlreadyLoaded = true;
+                        continue;
+                    }
+
+                    // TODO: Fix not adding scenes that should not close to this list
+                    scenesToClose.Add(scene);
                 }
-
-                scenesToClose.Add(scene);
-            }
-
-            if (!newSceneIsAlreadyLoaded)
-            {
-                SceneManager.LoadSceneAsync(currentState.Scene);
+            
+                if (!newSceneIsAlreadyLoaded)
+                {
+                    SceneManager.LoadSceneAsync(currentState.Scenes[k]);
+                }
             }
 
             for (int i = 0; i < scenesToClose.Count; i++)

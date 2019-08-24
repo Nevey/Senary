@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using AppManagement;
 using UnityEngine;
 using Utilities;
 using MonoBehaviour = DI.MonoBehaviour;
@@ -20,10 +19,7 @@ namespace UserInput
         {
             base.OnDestroy();
 
-            for (int i = 0; i < actionSets.Count; i++)
-            {
-                actionSets[i].Unbind();
-            }
+            Unbind();
         }
 
         protected virtual void Update()
@@ -50,6 +46,22 @@ namespace UserInput
             }
             
             actionSets.Add(actionSet);
+        }
+
+        public void Bind()
+        {
+            for (int i = 0; i < actionSets.Count; i++)
+            {
+                actionSets[i].Bind();
+            }
+        }
+
+        public void Unbind()
+        {
+            for (int i = 0; i < actionSets.Count; i++)
+            {
+                actionSets[i].Unbind();
+            }
         }
     }
 }
